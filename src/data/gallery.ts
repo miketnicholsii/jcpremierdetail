@@ -9,6 +9,10 @@ import paintCorrectionBefore from "@/assets/gallery/paint-correction-before.jpg"
 import paintCorrectionAfter from "@/assets/gallery/paint-correction-after.jpg";
 import ceramicCoatingBefore from "@/assets/gallery/ceramic-coating-before.jpg";
 import ceramicCoatingAfter from "@/assets/gallery/ceramic-coating-after.jpg";
+import ppfSportscarBefore from "@/assets/gallery/ppf-sportscar-before.jpg";
+import ppfSportscarAfter from "@/assets/gallery/ppf-sportscar-after.jpg";
+import maintenanceTruckBefore from "@/assets/gallery/maintenance-truck-before.jpg";
+import maintenanceTruckAfter from "@/assets/gallery/maintenance-truck-after.jpg";
 
 export interface GalleryItem {
   id: string;
@@ -69,7 +73,7 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "3",
     title: "Porsche 911 Full PPF",
-    description: "Complete paint protection film installation to protect this Guards Red 911 from rock chips and road debris.",
+    description: "Complete paint protection film installation to protect this stunning blue 911 from rock chips and road debris.",
     serviceType: "Paint Protection Film",
     serviceId: "paint-protection-film",
     city: "Greer",
@@ -78,8 +82,8 @@ export const galleryItems: GalleryItem[] = [
     vehicleTypeId: "sports-car",
     vehicleMake: "Porsche",
     vehicleModel: "911",
-    beforeImage: "https://images.unsplash.com/photo-1611821064430-0d40291d0f0b?w=800&h=600&fit=crop&auto=format",
-    afterImage: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800&h=600&fit=crop&auto=format",
+    beforeImage: ppfSportscarBefore,
+    afterImage: ppfSportscarAfter,
     featured: true,
     packageUsed: "Full Front",
     duration: "2 days",
@@ -191,18 +195,19 @@ export const galleryItems: GalleryItem[] = [
   },
   {
     id: "10",
-    title: "GMC Sierra Maintenance Detail",
-    description: "Regular maintenance detail to keep this ceramic-coated Sierra looking pristine between full services.",
+    title: "Ford Ranger Maintenance Detail",
+    description: "Regular maintenance detail removing pollen and road grime to keep this ceramic-coated truck looking pristine.",
     serviceType: "Maintenance Detailing",
     serviceId: "maintenance-detailing",
     city: "Boiling Springs",
     cityId: "boiling-springs",
     vehicleType: "Truck",
     vehicleTypeId: "truck",
-    vehicleMake: "GMC",
-    vehicleModel: "Sierra",
-    beforeImage: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&h=600&fit=crop&auto=format",
-    afterImage: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=600&fit=crop&auto=format",
+    vehicleMake: "Ford",
+    vehicleModel: "Ranger",
+    beforeImage: maintenanceTruckBefore,
+    afterImage: maintenanceTruckAfter,
+    featured: true,
     packageUsed: "Standard",
     duration: "2 hours",
   },
