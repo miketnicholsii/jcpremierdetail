@@ -4,6 +4,7 @@ import { Menu, X, Phone, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { businessInfo, getPhoneLink, serviceAreas } from "@/data/business";
 import { services } from "@/data/services";
+import { getLocationPath, getServiceLocationPath } from "@/lib/routes";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -88,7 +89,7 @@ const Header = () => {
                       {services.map((service) => (
                         <li key={service.id}>
                           <Link
-                            to={`/${service.slug}-spartanburg-sc`}
+                            to={getServiceLocationPath(service.slug, "spartanburg-sc")}
                             className="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                           >
                             <div className="text-sm font-medium leading-none">{service.name}</div>
@@ -115,7 +116,7 @@ const Header = () => {
                       {serviceAreas.map((area) => (
                         <li key={area.id}>
                           <Link
-                            to={`/auto-detailing-${area.slug}`}
+                            to={getLocationPath(area.slug)}
                             className="block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                           >
                             <div className="text-sm font-medium leading-none">

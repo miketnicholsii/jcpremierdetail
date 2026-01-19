@@ -8,6 +8,7 @@ import { FadeIn, SlideInLeft, SlideInRight, StaggerContainer, StaggerItem } from
 import { services } from "@/data/services";
 import { getServiceIcon } from "@/components/ui/ServiceCard";
 import { serviceAreas, businessInfo, getPhoneLink, getDirectionsLink } from "@/data/business";
+import { getLocationPath, getServiceLocationPath } from "@/lib/routes";
 import {
   Phone,
   MapPin,
@@ -131,7 +132,7 @@ const LocationPage = ({ cityId }: LocationPageProps) => {
           name="description"
           content={`Professional auto detailing in ${city.name}, SC. JC Premier Detail offers ceramic coating, paint protection film, paint correction, and interior detailing. Call (864) 542-3617.`}
         />
-        <link rel="canonical" href={`https://jcpremierdetail.com/auto-detailing-${city.slug}`} />
+        <link rel="canonical" href={`https://jcpremierdetail.com${getLocationPath(city.slug)}`} />
       </Helmet>
 
       {/* Hero Section */}
@@ -258,10 +259,7 @@ const LocationPage = ({ cityId }: LocationPageProps) => {
               const ServiceIcon = getServiceIcon(service.icon);
               return (
                 <StaggerItem key={service.id}>
-                  <Link
-                    to={`/${service.slug}-${city.slug}`}
-                    className="group block h-full"
-                  >
+                  <Link to={getServiceLocationPath(service.slug, city.slug)} className="group block h-full">
                     <Card className="h-full border-border/50 hover:border-primary/50 transition-all duration-300 overflow-hidden">
                       <CardContent className="p-6">
                         <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
@@ -377,7 +375,7 @@ const LocationPage = ({ cityId }: LocationPageProps) => {
             {otherCities.map((otherCity) => (
               <Link
                 key={otherCity.id}
-                to={`/auto-detailing-${otherCity.slug}`}
+                to={getLocationPath(otherCity.slug)}
                 className="group flex items-center justify-center gap-2 p-4 rounded-xl bg-card border border-border/50 hover:border-primary/50 transition-all"
               >
                 <MapPin className="w-4 h-4 text-primary" />
