@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Layout from "@/components/layout/Layout";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { businessInfo, serviceAreas } from "@/data/business";
-import { services } from "@/data/services";
+import { services, vehicleCategories } from "@/data/services";
 import { 
   Shield, 
   Star, 
@@ -15,8 +15,19 @@ import {
   Sparkles,
   Award,
   Users,
-  Car
+  Car,
+  Truck,
+  Mountain,
+  Anchor,
+  Caravan,
+  HardHat,
+  ArrowRight,
+  Wrench
 } from "lucide-react";
+
+const vehicleIcons: Record<string, React.ElementType> = {
+  Car, Truck, Mountain, Anchor, Caravan, HardHat,
+};
 
 const trustBadges = [
   { icon: Shield, label: "Ceramic Pro Certified" },
@@ -124,21 +135,143 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Vehicle Categories - What We Protect */}
+      <section className="py-20 bg-background">
+        <div className="container px-4">
+          <SectionHeading
+            badge="What We Protect"
+            title="From Daily Drivers to Heavy Equipment"
+            description="We don't treat every asset like a scaled-up car. Each vehicle type gets specialized protection tailored to its unique challenges."
+          />
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+            {vehicleCategories.map((category) => {
+              const Icon = vehicleIcons[category.icon] || Car;
+              return (
+                <Link
+                  key={category.id}
+                  to={`/services/${category.slug}`}
+                  className="group relative block overflow-hidden rounded-2xl bg-gradient-to-br from-card to-card/50 border border-border/50 hover:border-primary/50 transition-all duration-500 hover:-translate-y-1"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative p-6">
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                      <Icon className="w-7 h-7 text-primary" />
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                      {category.name}
+                    </h3>
+                    
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                      {category.shortDescription}
+                    </p>
+                    
+                    <div className="flex items-center text-primary text-sm font-medium">
+                      View Services
+                      <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Off-Road & Heavy Equipment Specialization */}
+      <section className="py-20 bg-gradient-to-br from-card/50 via-background to-card/30">
+        <div className="container px-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 text-primary mb-6">
+                <Wrench className="w-4 h-4" />
+                <span className="text-sm font-medium">Specialized Expertise</span>
+              </div>
+              
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                Off-Road & Heavy-Duty
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent"> Protection</span>
+              </h2>
+              
+              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                We've expanded our ceramic coating services to off-road vehicles and heavy equipment. 
+                Side-by-sides, trail Jeeps, construction machinery—these aren't automotive afterthoughts. 
+                They're purpose-built machines that deserve purpose-built protection.
+              </p>
+              
+              <div className="space-y-3 mb-8">
+                {[
+                  "Undercoating designed for mud, water, and rock impact",
+                  "Ceramic coatings that resist industrial chemicals",
+                  "Protection for equipment stored outdoors long-term",
+                  "Hands-on experience with heavy equipment coating",
+                ].map((item, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span className="text-foreground">{item}</span>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="flex flex-wrap gap-4">
+                <Button asChild>
+                  <Link to="/services/off-road">
+                    <Mountain className="w-4 h-4 mr-2" />
+                    Off-Road Services
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="border-primary/50">
+                  <Link to="/services/heavy-equipment">
+                    <HardHat className="w-4 h-4 mr-2" />
+                    Heavy Equipment
+                  </Link>
+                </Button>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <Card className="bg-card/80 border-border/50 p-6 text-center">
+                <Mountain className="w-10 h-10 text-primary mx-auto mb-3" />
+                <h4 className="font-semibold text-foreground mb-1">Off-Road Vehicles</h4>
+                <p className="text-sm text-muted-foreground">Jeeps, UTVs, Trail Trucks</p>
+              </Card>
+              <Card className="bg-card/80 border-border/50 p-6 text-center">
+                <HardHat className="w-10 h-10 text-primary mx-auto mb-3" />
+                <h4 className="font-semibold text-foreground mb-1">Heavy Equipment</h4>
+                <p className="text-sm text-muted-foreground">Construction & Industrial</p>
+              </Card>
+              <Card className="bg-card/80 border-border/50 p-6 text-center">
+                <Caravan className="w-10 h-10 text-primary mx-auto mb-3" />
+                <h4 className="font-semibold text-foreground mb-1">RVs & Campers</h4>
+                <p className="text-sm text-muted-foreground">All Types & Sizes</p>
+              </Card>
+              <Card className="bg-card/80 border-border/50 p-6 text-center">
+                <Anchor className="w-10 h-10 text-primary mx-auto mb-3" />
+                <h4 className="font-semibold text-foreground mb-1">Boats & Marine</h4>
+                <p className="text-sm text-muted-foreground">Gel Coat & Paint Protection</p>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Services Overview */}
       <section className="py-20 bg-background">
         <div className="container px-4">
           <SectionHeading
-            title="Our Premium Services"
-            description="From ceramic coating to complete paint correction, we offer the full spectrum of professional detailing services."
+            title="Our Core Services"
+            description="From ceramic coating to complete paint correction, we offer the full spectrum of professional protection services."
           />
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
             {services.map((service) => (
-              <Link key={service.id} to={`/services#${service.id}`}>
+              <Link key={service.id} to={`/${service.slug}-spartanburg-sc`}>
                 <Card className="group h-full bg-card/50 border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
                   <CardContent className="p-6">
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                      <Car className="w-6 h-6 text-primary" />
+                      <Shield className="w-6 h-6 text-primary" />
                     </div>
                     <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
                       {service.name}
@@ -148,9 +281,7 @@ const Index = () => {
                     </p>
                     <div className="flex items-center text-primary text-sm font-medium">
                       Learn More
-                      <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
+                      <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </CardContent>
                 </Card>
