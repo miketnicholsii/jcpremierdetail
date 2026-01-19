@@ -1,3 +1,4 @@
+# JC Premier Detail robots.txt
 User-agent: Googlebot
 Allow: /
 
@@ -12,3 +13,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://jcpremierdetail.lovable.app/sitemap.xml
