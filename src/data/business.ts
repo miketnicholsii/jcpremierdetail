@@ -1,8 +1,10 @@
 // JC Premier Detail - Business Information
+// Updated with complete vehicle sizes including RV/Heavy Equipment tiers
 
 export const businessInfo = {
   name: "JC Premier Detail",
-  tagline: "Professional Detailing & Paint Correction",
+  tagline: "Professional Vehicle & Equipment Protection",
+  owner: "Josh",
   phone: "864-542-3617",
   phoneFormatted: "(864) 542-3617",
   email: "info@jcpremierdetail.com",
@@ -64,11 +66,44 @@ export const serviceAreas = [
   },
 ];
 
+// Complete vehicle size categories
 export const vehicleSizes = [
-  { id: "small", name: "Small", description: "Compact cars, coupes (e.g., Honda Civic, BMW 3 Series)" },
-  { id: "medium", name: "Medium", description: "Sedans, small SUVs (e.g., Toyota Camry, Honda CR-V)" },
-  { id: "large", name: "Large", description: "Full-size SUVs, trucks (e.g., Ford F-150, Tahoe)" },
-  { id: "xl", name: "XL", description: "Extended trucks, large SUVs (e.g., Ford F-250, Suburban)" },
+  { 
+    id: "small", 
+    name: "Small", 
+    description: "Compact cars, coupes (e.g., Honda Civic, BMW 3 Series)",
+    examples: ["Honda Civic", "Toyota Corolla", "BMW 3 Series", "Mazda 3"],
+  },
+  { 
+    id: "medium", 
+    name: "Medium", 
+    description: "Sedans, small SUVs (e.g., Toyota Camry, Honda CR-V)",
+    examples: ["Toyota Camry", "Honda Accord", "Honda CR-V", "RAV4"],
+  },
+  { 
+    id: "large", 
+    name: "Large", 
+    description: "Full-size SUVs, trucks (e.g., Ford F-150, Tahoe)",
+    examples: ["Ford F-150", "Chevrolet Tahoe", "Jeep Wrangler", "Toyota 4Runner"],
+  },
+  { 
+    id: "xl", 
+    name: "XL", 
+    description: "Extended trucks, large SUVs (e.g., Ford F-250, Suburban)",
+    examples: ["Ford F-250", "Chevrolet Suburban", "GMC Yukon XL", "Ford Excursion"],
+  },
+  { 
+    id: "xxl", 
+    name: "XXL / Oversized", 
+    description: "RVs, campers, trailers, heavy equipment",
+    examples: ["Travel Trailers", "Fifth Wheels", "Motorhomes", "Heavy Equipment"],
+  },
+  { 
+    id: "boat", 
+    name: "Boat / Marine", 
+    description: "Boats and marine vessels of all sizes",
+    examples: ["Bass Boats", "Pontoons", "Ski Boats", "Center Consoles"],
+  },
 ];
 
 export const getPhoneLink = () => `tel:${businessInfo.phone.replace(/-/g, "")}`;

@@ -1,10 +1,120 @@
-// JC Premier Detail - Services & Pricing Data
+// JC Premier Detail - Complete Services & Vehicle Categories Data
+// Phase 0-3: Locked Client Input + Service Architecture + Asset-Based Breakdown
 
+// ============= VEHICLE CATEGORIES (Asset Types) =============
+export interface VehicleCategory {
+  id: string;
+  name: string;
+  slug: string;
+  shortDescription: string;
+  longDescription: string;
+  icon: string;
+  challenges: string[];
+  recommendedServices: string[];
+  image?: string;
+}
+
+export const vehicleCategories: VehicleCategory[] = [
+  {
+    id: "cars-sedans",
+    name: "Cars & Sedans",
+    slug: "cars-sedans",
+    shortDescription: "Daily drivers and performance vehicles",
+    longDescription: "From daily commuters to high-performance sports cars, passenger vehicles require protection tailored to their use. Daily drivers face constant exposure to UV, road grime, and environmental contaminants. Performance cars demand flawless finishes that showcase their design while protecting against track debris and spirited driving conditions.",
+    icon: "Car",
+    challenges: [
+      "Daily UV exposure causes paint oxidation",
+      "Road salt and debris damage clear coat",
+      "Frequent washing creates swirl marks",
+      "Parking lot hazards and door dings",
+    ],
+    recommendedServices: ["ceramic-coating", "paint-correction", "interior-detailing", "window-tint"],
+  },
+  {
+    id: "trucks-suvs",
+    name: "Trucks & SUVs",
+    slug: "trucks-suvs",
+    shortDescription: "Work trucks, personal trucks, and family SUVs",
+    longDescription: "Trucks and SUVs serve demanding roles—from job site workhorses to family transportation. Their larger surface areas, bed liners, and elevated ride heights create unique challenges. Whether you're hauling equipment or hauling kids, these vehicles need protection that matches their heavy-duty purpose.",
+    icon: "Truck",
+    challenges: [
+      "Larger surface area requires more material",
+      "Truck beds face extreme wear and chemical exposure",
+      "Lifted vehicles collect more road debris",
+      "Work use means harsher operating conditions",
+    ],
+    recommendedServices: ["ceramic-coating", "undercoating", "interior-detailing", "exterior-detailing"],
+  },
+  {
+    id: "off-road",
+    name: "Off-Road Vehicles",
+    slug: "off-road",
+    shortDescription: "Side-by-sides, 4x4 Jeeps, and off-road trucks",
+    longDescription: "Off-road vehicles aren't scaled-up cars—they're purpose-built machines designed for abuse. Side-by-sides, 4x4 Jeeps, and off-road trucks face mud, water, rocks, and extreme environments that demand specialized protection. Standard automotive products and processes simply don't hold up to trail conditions.",
+    icon: "Mountain",
+    challenges: [
+      "Constant mud, water, and debris exposure",
+      "Undercarriage takes heavy impact and abrasion",
+      "Chemical exposure from trail conditions",
+      "Extended environmental exposure between washes",
+    ],
+    recommendedServices: ["undercoating", "ceramic-coating", "exterior-detailing"],
+  },
+  {
+    id: "boats",
+    name: "Boats",
+    slug: "boats",
+    shortDescription: "Marine vessels requiring specialized protection",
+    longDescription: "Marine environments present the harshest conditions for any finish. Salt water, constant sun exposure, and oxidation attack gel coats and painted surfaces relentlessly. Marine ceramic coatings and specialized detailing protocols protect your investment from the unique demands of life on the water.",
+    icon: "Anchor",
+    challenges: [
+      "Salt water corrosion and mineral deposits",
+      "Constant UV exposure causes gel coat breakdown",
+      "Water line staining and oxidation",
+      "Multiple material types (gel coat, vinyl, metal, canvas)",
+    ],
+    recommendedServices: ["ceramic-coating", "exterior-detailing"],
+  },
+  {
+    id: "rv-campers",
+    name: "RVs & Campers",
+    slug: "rv-campers",
+    shortDescription: "Travel trailers, fifth wheels, motorhomes, camper vans, and pop-ups",
+    longDescription: "RVs and campers—whether travel trailers, fifth wheels, motorhomes, camper vans, or pop-up campers—present unique challenges due to their size, material variety, and long-term exposure. These aren't just vehicles; they're mobile living spaces that face extended periods of sun, weather, and road conditions. Protection strategies must account for multiple surface types and large coverage areas.",
+    icon: "Caravan",
+    challenges: [
+      "Massive surface areas require extended application time",
+      "Multiple materials: fiberglass, aluminum, rubber, decals",
+      "Extended stationary periods lead to oxidation",
+      "Roof and seam areas face concentrated weathering",
+    ],
+    recommendedServices: ["ceramic-coating", "exterior-detailing", "interior-detailing"],
+  },
+  {
+    id: "heavy-equipment",
+    name: "Heavy Equipment & Machinery",
+    slug: "heavy-equipment",
+    shortDescription: "Construction equipment, commercial machinery, and industrial assets",
+    longDescription: "Heavy equipment operates in conditions no passenger vehicle would survive. Construction machinery, commercial equipment, and industrial assets face constant exposure to chemicals, abrasives, and extreme wear. This is a separate category entirely—not automotive-adjacent, not RV-adjacent. Ceramic coating heavy equipment is specialized work we've recently expanded into, bringing real protection to real work machines.",
+    icon: "HardHat",
+    challenges: [
+      "Industrial chemical and fuel exposure",
+      "Heavy abrasion from work environments",
+      "Extended outdoor storage and exposure",
+      "Hydraulic fluid and grease contamination",
+    ],
+    recommendedServices: ["ceramic-coating", "undercoating", "exterior-detailing"],
+  },
+];
+
+// ============= SIZE PRICING TIERS =============
 export interface PriceTier {
   small: number;
   medium: number;
   large: number;
   xl: number;
+  xxl?: number; // For RVs, heavy equipment
+  boat?: number; // Marine-specific pricing
 }
 
 export interface ServicePackage {
@@ -15,12 +125,14 @@ export interface ServicePackage {
   features: string[];
   prices: PriceTier;
   popular?: boolean;
+  vehicleTypes?: string[]; // Which vehicle categories this applies to
 }
 
 export interface Service {
   id: string;
   name: string;
   slug: string;
+  category: "surface-protection" | "surface-correction" | "exterior-systems" | "interior-systems" | "glass-visibility";
   shortDescription: string;
   longDescription: string;
   icon: string;
@@ -28,16 +140,21 @@ export interface Service {
   process: string[];
   faqs: { question: string; answer: string }[];
   packages: ServicePackage[];
+  applicableVehicles: string[]; // Which vehicle categories this applies to
 }
 
+// ============= SERVICES (Organized by Functional Groups - Phase 2) =============
 export const services: Service[] = [
+  // === SURFACE PROTECTION ===
   {
     id: "ceramic-coating",
     name: "Ceramic Coating",
     slug: "ceramic-coating",
-    shortDescription: "Long-lasting protection with a brilliant, hydrophobic finish.",
-    longDescription: "Our professional-grade ceramic coatings bond at the molecular level to create an incredibly durable protective layer. This advanced nanotechnology shields your paint from UV rays, chemical stains, bird droppings, and environmental contaminants while providing an unmatched glossy finish.",
+    category: "surface-protection",
+    shortDescription: "Long-lasting protection with a brilliant, hydrophobic finish for any asset.",
+    longDescription: "Our professional-grade ceramic coatings bond at the molecular level to create an incredibly durable protective layer. This advanced nanotechnology shields surfaces from UV rays, chemical stains, and environmental contaminants. We apply ceramic coatings across all vehicle types—from daily drivers to heavy equipment—adapting our process and products to each asset's unique requirements.",
     icon: "Shield",
+    applicableVehicles: ["cars-sedans", "trucks-suvs", "off-road", "boats", "rv-campers", "heavy-equipment"],
     benefits: [
       "Exceptional UV protection prevents fading",
       "Hydrophobic surface repels water and contaminants",
@@ -47,7 +164,8 @@ export const services: Service[] = [
       "Long-lasting durability (1-5+ years)",
     ],
     process: [
-      "Thorough wash and decontamination",
+      "Thorough inspection and condition assessment",
+      "Deep wash and full decontamination",
       "Paint correction (if needed) to remove defects",
       "IPA wipe-down to prepare surface",
       "Careful application of ceramic coating",
@@ -56,8 +174,8 @@ export const services: Service[] = [
     ],
     faqs: [
       { question: "How long does ceramic coating last?", answer: "Depending on the package, our ceramic coatings last from 12 months (Bronze) up to 5+ years (Platinum), with proper maintenance." },
-      { question: "Can ceramic coating be applied to a new car?", answer: "Absolutely! New cars benefit greatly from ceramic coating as it protects the factory paint from day one." },
-      { question: "Does ceramic coating prevent scratches?", answer: "While ceramic coating adds a protective layer, it's not scratch-proof. However, it does provide significant resistance to light scratches and swirl marks." },
+      { question: "Can ceramic coating be applied to boats and RVs?", answer: "Absolutely. We use marine-grade and specialty coatings designed for each surface type. Gel coat, fiberglass, and painted metal all require different approaches." },
+      { question: "Do you coat heavy equipment?", answer: "Yes. We've recently expanded ceramic coating to heavy equipment and machinery. Industrial environments demand protection, and ceramic coatings reduce cleaning time and protect against chemical exposure." },
     ],
     packages: [
       {
@@ -66,7 +184,7 @@ export const services: Service[] = [
         duration: "12-Month Protection",
         description: "Entry-level protection perfect for leased vehicles or budget-conscious owners.",
         features: ["1-year ceramic coating", "Light paint enhancement", "Hydrophobic protection", "UV protection"],
-        prices: { small: 425, medium: 550, large: 700, xl: 850 },
+        prices: { small: 425, medium: 550, large: 700, xl: 850, xxl: 1200, boat: 800 },
       },
       {
         id: "silver",
@@ -74,7 +192,7 @@ export const services: Service[] = [
         duration: "2-Year Protection",
         description: "Enhanced protection with improved durability and gloss.",
         features: ["2-year ceramic coating", "Single-stage paint correction", "Enhanced hydrophobic effect", "Chemical resistance", "UV protection"],
-        prices: { small: 825, medium: 950, large: 1100, xl: 1300 },
+        prices: { small: 825, medium: 950, large: 1100, xl: 1300, xxl: 1800, boat: 1400 },
         popular: true,
       },
       {
@@ -83,7 +201,7 @@ export const services: Service[] = [
         duration: "5-Year Protection",
         description: "Premium protection for enthusiasts who demand the best.",
         features: ["5-year ceramic coating", "Two-stage paint correction", "Maximum hydrophobic effect", "Superior chemical resistance", "Enhanced UV protection", "Trim coating included"],
-        prices: { small: 1100, medium: 1250, large: 1450, xl: 1700 },
+        prices: { small: 1100, medium: 1250, large: 1450, xl: 1700, xxl: 2400, boat: 2000 },
       },
       {
         id: "platinum",
@@ -91,17 +209,68 @@ export const services: Service[] = [
         duration: "5+ Year Protection",
         description: "The ultimate protection package with our most durable coating.",
         features: ["5+ year ceramic coating", "Full paint correction", "Maximum hardness (9H)", "Premium hydrophobic effect", "Complete chemical resistance", "Full trim and wheel coating", "Annual maintenance included"],
-        prices: { small: 1200, medium: 1400, large: 1650, xl: 1900 },
+        prices: { small: 1200, medium: 1400, large: 1650, xl: 1900, xxl: 3000, boat: 2500 },
       },
     ],
   },
   {
+    id: "undercoating",
+    name: "Undercoating",
+    slug: "undercoating",
+    category: "surface-protection",
+    shortDescription: "Corrosion protection and abrasion resistance for undercarriage components.",
+    longDescription: "Undercoating protects the areas you can't see but can't afford to neglect. Whether fighting road salt corrosion on a daily driver or protecting against mud, water, and rock impact on an off-road rig, professional undercoating extends vehicle life and prevents costly repairs. This isn't just spray-and-pray—we prep, clean, and apply with purpose.",
+    icon: "ShieldCheck",
+    applicableVehicles: ["cars-sedans", "trucks-suvs", "off-road", "heavy-equipment"],
+    benefits: [
+      "Prevents rust and corrosion from road salt",
+      "Protects against rock chips and road debris",
+      "Reduces road noise and vibration",
+      "Extends vehicle and equipment lifespan",
+      "Essential for off-road vehicles",
+    ],
+    process: [
+      "Undercarriage inspection and assessment",
+      "High-pressure cleaning to remove debris",
+      "Rust treatment on existing corrosion",
+      "Surface preparation and masking",
+      "Professional undercoating application",
+      "Final inspection and documentation",
+    ],
+    faqs: [
+      { question: "How often should undercoating be reapplied?", answer: "For daily drivers, every 2-3 years. For off-road vehicles, annually or after heavy trail seasons." },
+      { question: "Is undercoating necessary in South Carolina?", answer: "While we don't have heavy salt, humidity causes corrosion, and off-road use accelerates wear. Undercoating provides valuable protection regardless of climate." },
+      { question: "Do you undercoat heavy equipment?", answer: "Yes. Industrial equipment benefits significantly from corrosion protection, especially equipment stored outdoors or used in wet/muddy conditions." },
+    ],
+    packages: [
+      {
+        id: "standard",
+        name: "Standard Undercoating",
+        description: "Complete undercarriage protection for daily drivers.",
+        features: ["Full undercarriage cleaning", "Rust treatment", "Professional undercoating application", "Wheel wells included"],
+        prices: { small: 250, medium: 350, large: 450, xl: 550, xxl: 800 },
+      },
+      {
+        id: "offroad",
+        name: "Off-Road Package",
+        description: "Heavy-duty protection for trail-ready vehicles.",
+        features: ["Everything in Standard", "Extra-thick application", "Skid plate coating", "Frame rail treatment", "Suspension component protection"],
+        prices: { small: 400, medium: 500, large: 650, xl: 800, xxl: 1100 },
+        popular: true,
+      },
+    ],
+  },
+
+  // === SURFACE CORRECTION ===
+  {
     id: "paint-correction",
     name: "Paint Correction",
     slug: "paint-correction",
+    category: "surface-correction",
     shortDescription: "Remove swirls, scratches, and imperfections to restore your paint.",
-    longDescription: "Paint correction is the art of removing imperfections from your vehicle's clear coat through meticulous machine polishing. Our skilled technicians use advanced techniques to eliminate swirl marks, scratches, water spots, and oxidation, revealing the true brilliance of your paint.",
+    longDescription: "Paint correction is the art of removing imperfections from your vehicle's clear coat through meticulous machine polishing. Our skilled technicians use advanced techniques to eliminate swirl marks, scratches, water spots, and oxidation. This is essential prep before any coating—you don't seal defects under protection.",
     icon: "Sparkles",
+    applicableVehicles: ["cars-sedans", "trucks-suvs", "off-road", "boats", "rv-campers"],
     benefits: [
       "Removes 90%+ of swirl marks and scratches",
       "Restores original paint clarity and depth",
@@ -121,79 +290,105 @@ export const services: Service[] = [
     faqs: [
       { question: "Will paint correction damage my clear coat?", answer: "When done properly by trained professionals, paint correction is safe. We measure paint thickness before and monitor throughout the process." },
       { question: "How long does paint correction take?", answer: "A full paint correction typically takes 8-12 hours depending on vehicle size and condition. We never rush the process." },
-      { question: "How often should I get paint correction?", answer: "With proper care and protection (like ceramic coating), you may only need paint correction once or twice in your vehicle's lifetime." },
+      { question: "Should paint correction be done before ceramic coating?", answer: "Yes. We always correct paint before coating—you want to seal perfection, not defects." },
     ],
     packages: [
       {
-        id: "standard",
-        name: "Standard Correction",
+        id: "single-stage",
+        name: "Single-Stage Correction",
+        duration: "1-Step Process",
+        description: "Light correction for minor swirls and enhance gloss.",
+        features: ["One-stage polishing", "60-70% defect removal", "Light swirl removal", "Gloss enhancement"],
+        prices: { small: 300, medium: 400, large: 500, xl: 600, xxl: 900, boat: 600 },
+      },
+      {
+        id: "two-stage",
+        name: "Two-Stage Correction",
         duration: "2-Step Process",
-        description: "Our comprehensive two-stage correction removes up to 90% of defects.",
-        features: ["Two-stage polishing", "90% defect removal", "Swirl mark elimination", "Scratch removal", "Water spot removal", "Final polish"],
-        prices: { small: 500, medium: 600, large: 700, xl: 800 },
-      },
-    ],
-  },
-  {
-    id: "paint-protection-film",
-    name: "Paint Protection Film",
-    slug: "paint-protection-film",
-    shortDescription: "Invisible armor that shields against rock chips and road debris.",
-    longDescription: "Paint Protection Film (PPF) is a virtually invisible urethane film that protects your vehicle's paint from rock chips, road debris, bug splatter, and minor abrasions. Our premium films feature self-healing technology that automatically repairs light scratches with heat.",
-    icon: "Shield",
-    benefits: [
-      "Protection from rock chips and road debris",
-      "Self-healing technology for light scratches",
-      "Invisible protection maintains factory appearance",
-      "UV resistant prevents yellowing",
-      "Removable without damage to paint",
-      "10-year manufacturer warranty",
-    ],
-    process: [
-      "Surface preparation and cleaning",
-      "Precise computer-cut patterns",
-      "Expert installation by certified technicians",
-      "Edge sealing and finishing",
-      "Heat treatment for optimal adhesion",
-      "Quality inspection",
-    ],
-    faqs: [
-      { question: "Is PPF noticeable on the car?", answer: "High-quality PPF is virtually invisible when properly installed. It maintains your vehicle's original appearance." },
-      { question: "How long does PPF last?", answer: "Our premium PPF comes with a 10-year warranty and can last even longer with proper care." },
-      { question: "Can PPF be applied over ceramic coating?", answer: "For best results, PPF should be applied first, then ceramic coating can be applied over the film for additional protection." },
-    ],
-    packages: [
-      {
-        id: "partial",
-        name: "Partial Front",
-        description: "Essential protection for high-impact areas.",
-        features: ["Full hood coverage", "Full front fenders", "Front bumper", "Side mirrors", "Door edges"],
-        prices: { small: 1200, medium: 1400, large: 1600, xl: 1800 },
-      },
-      {
-        id: "full-front",
-        name: "Full Front",
-        description: "Complete front-end protection for maximum coverage.",
-        features: ["Full hood", "Full front fenders", "Full front bumper", "Headlights", "A-pillars", "Side mirrors", "Door edges", "Door cups"],
-        prices: { small: 1800, medium: 2100, large: 2400, xl: 2700 },
+        description: "Comprehensive correction for moderate defects.",
+        features: ["Two-stage polishing", "80-90% defect removal", "Swirl mark elimination", "Scratch removal", "Water spot removal", "Final polish"],
+        prices: { small: 500, medium: 600, large: 750, xl: 900, xxl: 1400, boat: 1000 },
         popular: true,
       },
       {
-        id: "full-vehicle",
-        name: "Full Vehicle",
-        description: "Ultimate protection with complete vehicle coverage.",
-        features: ["Complete exterior coverage", "All painted surfaces", "Rocker panels", "Rear bumper", "Full warranty coverage"],
-        prices: { small: 4500, medium: 5500, large: 6500, xl: 7500 },
+        id: "full-correction",
+        name: "Full Correction",
+        duration: "3+ Step Process",
+        description: "Maximum correction for heavily damaged or neglected paint.",
+        features: ["Multi-stage polishing", "95%+ defect removal", "Deep scratch removal", "Heavy oxidation correction", "Wet sanding if needed", "Showroom finish"],
+        prices: { small: 700, medium: 850, large: 1000, xl: 1200, xxl: 1800, boat: 1400 },
       },
     ],
   },
+
+  // === EXTERIOR SYSTEMS ===
+  {
+    id: "exterior-detailing",
+    name: "Exterior Detailing",
+    slug: "exterior-detailing",
+    category: "exterior-systems",
+    shortDescription: "Professional wash and protection for a stunning finish.",
+    longDescription: "Our exterior detailing goes far beyond a regular car wash. We use premium products and proven techniques to safely clean, decontaminate, and protect your vehicle's exterior surfaces. This applies to every asset type—from daily drivers to boats and RVs—with process adjustments for each.",
+    icon: "Droplets",
+    applicableVehicles: ["cars-sedans", "trucks-suvs", "off-road", "boats", "rv-campers", "heavy-equipment"],
+    benefits: [
+      "Safe, scratch-free washing technique",
+      "Removes bonded contaminants",
+      "Protects paint from elements",
+      "Restores tire and trim appearance",
+      "Cleans wheels and wheel wells",
+      "Enhances overall vehicle appearance",
+    ],
+    process: [
+      "Pre-rinse and foam cannon",
+      "Two-bucket wash method",
+      "Wheel and tire cleaning",
+      "Clay bar decontamination (if needed)",
+      "Paint sealant or wax application",
+      "Tire dressing and trim restoration",
+      "Glass cleaning and water repellent",
+    ],
+    faqs: [
+      { question: "How is this different from a regular car wash?", answer: "We use pH-balanced products, proper techniques, and hand-dry with microfiber towels to prevent scratches and swirls that automatic washes cause." },
+      { question: "Do you detail boats and RVs?", answer: "Yes. We adapt our process for each surface type—gel coat requires different products than automotive paint." },
+      { question: "Can you detail heavy equipment?", answer: "Absolutely. We clean and protect equipment surfaces, making maintenance easier and extending equipment life." },
+    ],
+    packages: [
+      {
+        id: "bronze",
+        name: "Bronze Wash",
+        description: "Premium hand wash with basic protection.",
+        features: ["Hand wash", "Wheel cleaning", "Tire dressing", "Window cleaning", "Quick interior wipe"],
+        prices: { small: 35, medium: 50, large: 75, xl: 100, xxl: 200, boat: 150 },
+      },
+      {
+        id: "silver",
+        name: "Silver Detail",
+        description: "Complete exterior care with lasting protection.",
+        features: ["Everything in Bronze", "Clay bar treatment", "Paint sealant", "Trim restoration", "Engine bay rinse", "Door jamb cleaning"],
+        prices: { small: 125, medium: 175, large: 225, xl: 300, xxl: 500, boat: 400 },
+        popular: true,
+      },
+      {
+        id: "gold",
+        name: "Gold Detail",
+        description: "Show-quality exterior with premium protection.",
+        features: ["Everything in Silver", "Light paint enhancement", "Wheel coating", "Glass sealant", "Exhaust tip polishing", "Trim coating"],
+        prices: { small: 225, medium: 300, large: 400, xl: 500, xxl: 800, boat: 650 },
+      },
+    ],
+  },
+
+  // === INTERIOR SYSTEMS ===
   {
     id: "interior-detailing",
     name: "Interior Detailing",
     slug: "interior-detailing",
+    category: "interior-systems",
     shortDescription: "Deep cleaning and conditioning for a pristine cabin.",
-    longDescription: "Our interior detailing services restore your vehicle's cabin to showroom condition. From deep carpet extraction to leather conditioning, we meticulously clean and protect every surface to create a healthy, beautiful interior environment.",
+    longDescription: "Our interior detailing services restore your vehicle's cabin to showroom condition. From deep carpet extraction to leather conditioning, we meticulously clean and protect every surface. This extends to RV interiors, boat cabins, and truck cabs—any enclosed space where you spend time.",
     icon: "Armchair",
+    applicableVehicles: ["cars-sedans", "trucks-suvs", "off-road", "boats", "rv-campers"],
     benefits: [
       "Removes allergens and bacteria",
       "Eliminates odors at the source",
@@ -213,8 +408,8 @@ export const services: Service[] = [
     ],
     faqs: [
       { question: "How often should I detail my interior?", answer: "We recommend a full interior detail every 4-6 months, with regular maintenance cleaning in between." },
-      { question: "Can you remove pet hair?", answer: "Yes! We have specialized tools and techniques specifically for removing stubborn pet hair from all surfaces." },
-      { question: "Will you clean my leather seats?", answer: "Absolutely. We use pH-balanced leather cleaners and premium conditioners to clean and protect your leather." },
+      { question: "Can you remove pet hair?", answer: "Yes. We have specialized tools and techniques specifically for removing stubborn pet hair from all surfaces." },
+      { question: "Do you detail RV and boat interiors?", answer: "Yes. RV and boat interiors often have unique materials—we adjust our products and process accordingly." },
     ],
     packages: [
       {
@@ -222,14 +417,14 @@ export const services: Service[] = [
         name: "Silver Interior",
         description: "Essential interior cleaning for regular maintenance.",
         features: ["Full vacuum", "Wipe-down of all surfaces", "Window cleaning", "Light stain removal", "Air freshener"],
-        prices: { small: 45, medium: 60, large: 75, xl: 90 },
+        prices: { small: 75, medium: 100, large: 125, xl: 150, xxl: 300, boat: 200 },
       },
       {
         id: "gold",
         name: "Gold Interior",
         description: "Deep cleaning for a thorough refresh.",
         features: ["Everything in Silver", "Deep carpet extraction", "Upholstery shampooing", "Leather cleaning & conditioning", "Detailed crevice cleaning", "UV protection applied"],
-        prices: { small: 150, medium: 200, large: 250, xl: 300 },
+        prices: { small: 175, medium: 225, large: 300, xl: 375, xxl: 600, boat: 450 },
         popular: true,
       },
       {
@@ -237,110 +432,108 @@ export const services: Service[] = [
         name: "Platinum Interior",
         description: "Complete restoration for neglected interiors.",
         features: ["Everything in Gold", "Steam cleaning", "Headliner cleaning", "Odor elimination treatment", "Complete sanitization", "Premium leather treatment", "Fabric protection applied"],
-        prices: { small: 200, medium: 275, large: 350, xl: 400 },
+        prices: { small: 275, medium: 350, large: 450, xl: 550, xxl: 900, boat: 700 },
       },
     ],
   },
+
+  // === GLASS & VISIBILITY ===
   {
-    id: "exterior-detailing",
-    name: "Exterior Detailing",
-    slug: "exterior-detailing",
-    shortDescription: "Professional wash and protection for a stunning finish.",
-    longDescription: "Our exterior detailing goes far beyond a regular car wash. We use premium products and proven techniques to safely clean, decontaminate, and protect your vehicle's exterior surfaces, leaving a brilliant shine that lasts.",
-    icon: "Car",
+    id: "window-tint",
+    name: "Window Tint",
+    slug: "window-tint",
+    category: "glass-visibility",
+    shortDescription: "Professional window tinting for heat rejection and privacy.",
+    longDescription: "Window tint isn't just about looks—it's functional protection. Quality tint rejects heat, blocks UV rays, protects interior materials, and provides privacy. We use premium ceramic films that won't fade or bubble, installed with precision on any vehicle type.",
+    icon: "Sun",
+    applicableVehicles: ["cars-sedans", "trucks-suvs", "off-road", "boats", "rv-campers"],
     benefits: [
-      "Safe, scratch-free washing technique",
-      "Removes bonded contaminants",
-      "Protects paint from elements",
-      "Restores tire and trim appearance",
-      "Cleans wheels and wheel wells",
-      "Enhances overall vehicle appearance",
+      "Blocks up to 99% of harmful UV rays",
+      "Reduces interior heat significantly",
+      "Protects interior from fading and cracking",
+      "Increases privacy and security",
+      "Reduces glare for safer driving",
+      "Professional, bubble-free installation",
     ],
     process: [
-      "Pre-rinse and foam cannon",
-      "Two-bucket wash method",
-      "Wheel and tire cleaning",
-      "Clay bar decontamination",
-      "Paint sealant or wax application",
-      "Tire dressing and trim restoration",
-      "Glass cleaning and water repellent",
-    ],
-    faqs: [
-      { question: "How is this different from a regular car wash?", answer: "We use pH-balanced products, proper techniques, and hand-dry with microfiber towels to prevent scratches and swirls that automatic washes cause." },
-      { question: "Do you clean the engine bay?", answer: "Engine bay cleaning is available as an add-on service for an additional charge." },
-      { question: "How long does the protection last?", answer: "Our Bronze wash provides 2-4 weeks protection, while Silver includes sealant protection lasting 3-6 months." },
-    ],
-    packages: [
-      {
-        id: "bronze",
-        name: "Bronze Wash",
-        description: "Premium hand wash with basic protection.",
-        features: ["Hand wash", "Wheel cleaning", "Tire dressing", "Window cleaning", "Quick interior wipe"],
-        prices: { small: 20, medium: 30, large: 40, xl: 50 },
-      },
-      {
-        id: "silver",
-        name: "Silver Wash",
-        description: "Complete exterior care with lasting protection.",
-        features: ["Everything in Bronze", "Clay bar treatment", "Paint sealant", "Trim restoration", "Engine bay rinse", "Door jamb cleaning"],
-        prices: { small: 100, medium: 130, large: 160, xl: 200 },
-        popular: true,
-      },
-    ],
-  },
-  {
-    id: "maintenance-detailing",
-    name: "Maintenance Detailing",
-    slug: "maintenance-detailing",
-    shortDescription: "Regular care to maintain your vehicle's premium condition.",
-    longDescription: "Keep your ceramic-coated or recently detailed vehicle looking its best with our maintenance detailing services. Regular maintenance extends the life of protective coatings and ensures your vehicle always looks showroom-ready.",
-    icon: "Wrench",
-    benefits: [
-      "Extends coating longevity",
-      "Maintains hydrophobic properties",
-      "Prevents contaminant buildup",
-      "Preserves showroom appearance",
-      "Cost-effective regular care",
-      "Keeps your investment protected",
-    ],
-    process: [
-      "pH-neutral foam wash",
-      "Gentle hand washing",
-      "Coating-safe decontamination",
-      "Coating inspection and assessment",
-      "Topper application if needed",
+      "Window cleaning and preparation",
+      "Precise computer-cut film patterns",
+      "Expert installation technique",
+      "Edge sealing and inspection",
       "Final quality check",
     ],
     faqs: [
-      { question: "How often should I get maintenance detailing?", answer: "For ceramic-coated vehicles, we recommend maintenance every 3-4 months. For non-coated vehicles, every 4-6 weeks." },
-      { question: "Is this only for ceramic-coated vehicles?", answer: "No! While it's ideal for coated vehicles, any car benefits from professional maintenance detailing." },
-      { question: "Can I wash my car between maintenance visits?", answer: "Yes, we'll provide guidance on proper washing techniques to use between appointments." },
+      { question: "What tint percentage is legal in South Carolina?", answer: "SC allows 27% on front side windows and any darkness on rear windows. We'll help you choose the right level." },
+      { question: "Will window tint interfere with my electronics?", answer: "Our ceramic tints do not interfere with GPS, cell signals, or radio reception." },
+      { question: "How long does tint last?", answer: "Our premium ceramic tints come with a lifetime warranty against fading, bubbling, and peeling." },
     ],
     packages: [
       {
-        id: "maintenance",
-        name: "Maintenance Detail",
-        description: "Professional care to maintain your vehicle's condition.",
-        features: ["Coating-safe wash", "Decontamination as needed", "Coating inspection", "Topper application", "Interior quick clean", "Tire and trim dressing"],
-        prices: { small: 75, medium: 100, large: 125, xl: 150 },
+        id: "basic",
+        name: "Basic Tint",
+        description: "Quality dyed film for budget-conscious customers.",
+        features: ["Dyed window film", "5-year warranty", "All side windows", "Computer-cut patterns"],
+        prices: { small: 150, medium: 200, large: 250, xl: 300 },
+      },
+      {
+        id: "ceramic",
+        name: "Ceramic Tint",
+        description: "Premium ceramic film with superior heat rejection.",
+        features: ["Ceramic window film", "Lifetime warranty", "70%+ heat rejection", "99% UV block", "Signal-friendly"],
+        prices: { small: 300, medium: 400, large: 500, xl: 600, xxl: 900 },
+        popular: true,
+      },
+      {
+        id: "full-vehicle",
+        name: "Full Vehicle Ceramic",
+        description: "Complete coverage including windshield strip.",
+        features: ["Everything in Ceramic", "Windshield strip", "Rear window", "Full coverage"],
+        prices: { small: 400, medium: 500, large: 650, xl: 800, xxl: 1200 },
       },
     ],
   },
 ];
 
+// ============= ADD-ON SERVICES =============
 export const addOnServices = [
-  { id: "pdr", name: "Paintless Dent Repair", description: "Remove minor dents without repainting", priceRange: "Starting at $75" },
-  { id: "badge-removal", name: "Badge Removal", description: "Clean removal of emblems and badges", priceRange: "$25-50 per badge" },
+  { id: "engine-bay", name: "Engine Bay Cleaning", description: "Detailed cleaning and dressing of engine bay", priceRange: "$50-150" },
   { id: "headlight-restoration", name: "Headlight Restoration", description: "Restore cloudy headlights to crystal clarity", priceRange: "$75-150" },
-  { id: "engine-bay", name: "Engine Bay Cleaning", description: "Detailed cleaning and dressing of engine bay", priceRange: "$50-100" },
   { id: "wheel-coating", name: "Wheel Ceramic Coating", description: "Ceramic protection for wheels", priceRange: "$150-300" },
   { id: "glass-coating", name: "Glass Coating", description: "Hydrophobic coating for windshield and windows", priceRange: "$75-150" },
+  { id: "odor-elimination", name: "Odor Elimination", description: "Professional ozone treatment for stubborn odors", priceRange: "$75-150" },
+  { id: "pet-hair-removal", name: "Pet Hair Removal", description: "Specialized pet hair extraction service", priceRange: "$50-100" },
 ];
 
+// ============= HELPER FUNCTIONS =============
 export const getServiceBySlug = (slug: string): Service | undefined => {
   return services.find((s) => s.slug === slug);
 };
 
 export const getServiceById = (id: string): Service | undefined => {
   return services.find((s) => s.id === id);
+};
+
+export const getServicesByCategory = (category: Service["category"]): Service[] => {
+  return services.filter((s) => s.category === category);
+};
+
+export const getServicesForVehicle = (vehicleCategoryId: string): Service[] => {
+  return services.filter((s) => s.applicableVehicles.includes(vehicleCategoryId));
+};
+
+export const getVehicleCategoryById = (id: string): VehicleCategory | undefined => {
+  return vehicleCategories.find((v) => v.id === id);
+};
+
+export const getVehicleCategoryBySlug = (slug: string): VehicleCategory | undefined => {
+  return vehicleCategories.find((v) => v.slug === slug);
+};
+
+// Service category labels
+export const serviceCategoryLabels: Record<Service["category"], string> = {
+  "surface-protection": "Surface Protection",
+  "surface-correction": "Surface Correction",
+  "exterior-systems": "Exterior Systems",
+  "interior-systems": "Interior Systems",
+  "glass-visibility": "Glass & Visibility",
 };

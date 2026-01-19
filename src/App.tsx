@@ -12,6 +12,7 @@ import Contact from "./pages/Contact";
 import Booking from "./pages/Booking";
 import LocationPage from "./pages/LocationPage";
 import ServiceLocationPage from "./pages/ServiceLocationPage";
+import VehicleCategoryPage from "./pages/VehicleCategoryPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,9 @@ const App = () => (
           <Route path="/estimate" element={<Estimate />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/booking" element={<Booking />} />
+          
+          {/* Vehicle Category Pages */}
+          <Route path="/services/:slug" element={<VehicleCategoryPage />} />
           
           {/* Location Pages */}
           <Route path="/auto-detailing-spartanburg-sc" element={<LocationPage cityId="spartanburg" />} />
