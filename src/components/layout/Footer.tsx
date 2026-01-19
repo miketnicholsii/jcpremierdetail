@@ -61,6 +61,14 @@ const Footer = () => {
               ))}
               <li>
                 <Link
+                  to="/maintenance-plans"
+                  className="text-muted-foreground hover:text-primary text-sm transition-colors"
+                >
+                  Maintenance Plans
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/services"
                   className="text-primary hover:text-primary/80 text-sm font-medium transition-colors"
                 >

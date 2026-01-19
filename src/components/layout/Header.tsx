@@ -24,6 +24,7 @@ const Header = () => {
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Gallery", path: "/gallery" },
+    { name: "Plans", path: "/maintenance-plans" },
     { name: "Estimate", path: "/estimate" },
     { name: "Contact", path: "/contact" },
   ];
@@ -143,6 +144,16 @@ const Header = () => {
               )}
             >
               Gallery
+            </Link>
+
+            <Link
+              to="/maintenance-plans"
+              className={cn(
+                "px-4 py-2 text-sm font-medium rounded-lg transition-colors",
+                isActive("/maintenance-plans") ? "text-primary" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Plans
             </Link>
 
             <Link
