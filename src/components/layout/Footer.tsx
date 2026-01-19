@@ -9,52 +9,52 @@ const Footer = () => {
 
   return (
     <footer className="bg-card border-t border-border">
-      <div className="container-custom section-padding">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Brand Column */}
-          <div>
-            <Link to="/" className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xl">JC</span>
+      <div className="container-custom py-10 sm:py-16 lg:py-24 px-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          {/* Brand Column - Full width on mobile */}
+          <div className="col-span-2 lg:col-span-1">
+            <Link to="/" className="flex items-center gap-3 mb-4 sm:mb-6">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-primary flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-lg sm:text-xl">JC</span>
               </div>
               <div>
-                <span className="font-bold text-lg text-foreground">JC Premier Detail</span>
-                <p className="text-xs text-muted-foreground">{businessInfo.tagline}</p>
+                <span className="font-bold text-base sm:text-lg text-foreground">JC Premier Detail</span>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">{businessInfo.tagline}</p>
               </div>
             </Link>
-            <p className="text-muted-foreground text-sm mb-6">
+            <p className="text-muted-foreground text-xs sm:text-sm mb-4 sm:mb-6 hidden sm:block">
               Professional auto detailing services in the Spartanburg, Greenville, Greer, and Boiling Springs areas. 
               We specialize in ceramic coatings, paint correction, and premium detailing.
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               <a
                 href={businessInfo.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
               >
-                <Facebook className="w-5 h-5" />
+                <Facebook className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
               <a
                 href={businessInfo.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
               >
-                <Instagram className="w-5 h-5" />
+                <Instagram className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
             </div>
           </div>
 
           {/* Services Column */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-6">Our Services</h3>
-            <ul className="space-y-3">
-              {services.map((service) => (
+          <div className="hidden lg:block">
+            <h3 className="font-semibold text-foreground text-sm sm:text-base mb-4 sm:mb-6">Our Services</h3>
+            <ul className="space-y-2 sm:space-y-3">
+              {services.slice(0, 4).map((service) => (
                 <li key={service.id}>
                   <Link
                     to={getServiceLocationPath(service.slug, "spartanburg-sc")}
-                    className="text-muted-foreground hover:text-primary text-sm transition-colors"
+                    className="text-muted-foreground hover:text-primary text-xs sm:text-sm transition-colors"
                   >
                     {service.name}
                   </Link>
@@ -62,18 +62,10 @@ const Footer = () => {
               ))}
               <li>
                 <Link
-                  to="/maintenance-plans"
-                  className="text-muted-foreground hover:text-primary text-sm transition-colors"
-                >
-                  Maintenance Plans
-                </Link>
-              </li>
-              <li>
-                <Link
                   to="/services"
-                  className="text-primary hover:text-primary/80 text-sm font-medium transition-colors"
+                  className="text-primary hover:text-primary/80 text-xs sm:text-sm font-medium transition-colors"
                 >
-                  View All Services →
+                  View All →
                 </Link>
               </li>
             </ul>
@@ -81,13 +73,13 @@ const Footer = () => {
 
           {/* Locations Column */}
           <div>
-            <h3 className="font-semibold text-foreground mb-6">Service Areas</h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold text-foreground text-sm sm:text-base mb-3 sm:mb-6">Service Areas</h3>
+            <ul className="space-y-2 sm:space-y-3">
               {serviceAreas.map((area) => (
                 <li key={area.id}>
                   <Link
                     to={getLocationPath(area.slug)}
-                    className="text-muted-foreground hover:text-primary text-sm transition-colors"
+                    className="text-muted-foreground hover:text-primary text-xs sm:text-sm transition-colors"
                   >
                     {area.name}, {area.state}
                   </Link>

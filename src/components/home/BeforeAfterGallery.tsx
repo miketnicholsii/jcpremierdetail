@@ -31,8 +31,8 @@ const BeforeAfterGallery = memo(() => {
   const [currentGalleryItem, setCurrentGalleryItem] = useState(0);
 
   return (
-    <section className="py-20 bg-card/30">
-      <div className="container-custom">
+    <section className="py-12 sm:py-20 bg-card/30">
+      <div className="container-custom px-4">
         <FadeIn>
           <SectionHeading
             badge="Results"
@@ -41,14 +41,14 @@ const BeforeAfterGallery = memo(() => {
           />
         </FadeIn>
 
-        <div className="mt-12">
+        <div className="mt-8 sm:mt-12">
           {/* Gallery navigation */}
-          <div className="flex justify-center gap-4 mb-8">
+          <div className="flex justify-center gap-2 sm:gap-4 mb-6 sm:mb-8 flex-wrap">
             {beforeAfterGallery.map((item, idx) => (
               <button
                 key={item.title}
                 onClick={() => setCurrentGalleryItem(idx)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
                   currentGalleryItem === idx
                     ? "bg-primary text-primary-foreground"
                     : "bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/50"
@@ -68,11 +68,11 @@ const BeforeAfterGallery = memo(() => {
                 beforeLabel="Before"
                 afterLabel="After"
               />
-              <div className="text-center mt-6">
-                <h3 className="text-xl font-bold text-foreground mb-2">
+              <div className="text-center mt-4 sm:mt-6">
+                <h3 className="text-lg sm:text-xl font-bold text-foreground mb-1 sm:mb-2">
                   {beforeAfterGallery[currentGalleryItem].title}
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-sm sm:text-base text-muted-foreground">
                   {beforeAfterGallery[currentGalleryItem].description}
                 </p>
               </div>
@@ -80,8 +80,8 @@ const BeforeAfterGallery = memo(() => {
           </FadeIn>
 
           <FadeIn delay={0.3}>
-            <div className="text-center mt-10">
-              <Button asChild>
+            <div className="text-center mt-8 sm:mt-10">
+              <Button asChild className="w-full sm:w-auto">
                 <Link to="/gallery">
                   View Full Gallery
                   <ArrowRight className="w-4 h-4 ml-2" />
