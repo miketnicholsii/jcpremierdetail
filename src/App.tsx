@@ -10,6 +10,7 @@ import Gallery from "./pages/Gallery";
 import Estimate from "./pages/Estimate";
 import Contact from "./pages/Contact";
 import Booking from "./pages/Booking";
+import MaintenancePlans from "./pages/MaintenancePlans";
 import LocationPage from "./pages/LocationPage";
 import ServiceLocationPage from "./pages/ServiceLocationPage";
 import VehicleCategoryPage from "./pages/VehicleCategoryPage";
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/estimate" element={<Estimate />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/booking" element={<Booking />} />
+          <Route path="/maintenance-plans" element={<MaintenancePlans />} />
           
           {/* Vehicle Category Pages */}
           <Route path="/services/:slug" element={<VehicleCategoryPage />} />
