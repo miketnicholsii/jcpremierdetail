@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { businessInfo, getPhoneLink, serviceAreas } from "@/data/business";
 import { services } from "@/data/services";
@@ -18,6 +19,7 @@ import { cn } from "@/lib/utils";
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const shouldReduceMotion = useReducedMotion();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -199,49 +201,77 @@ const Header = () => {
         </div>
 
         {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-border py-4">
-            <nav className="flex flex-col gap-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={cn(
-                    "px-4 py-3 text-sm font-medium rounded-lg transition-colors",
-                    isActive(link.path)
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  )}
-                  onClick={() => setMobileMenuOpen(false)}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div 
+              className="lg:hidden border-t border-border py-4 overflow-hidden"
+              initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <nav className="flex flex-col gap-2">
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.path}
+                    initial={shouldReduceMotion ? false : { opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05, duration: 0.3 }}
+                  >
+                    <Link
+                      to={link.path}
+                      className={cn(
+                        "px-4 py-3 text-sm font-medium rounded-lg transition-colors block",
+                        isActive(link.path)
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      )}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                ))}
+                <motion.div
+                  initial={shouldReduceMotion ? false : { opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navLinks.length * 0.05, duration: 0.3 }}
                 >
-                  {link.name}
-                </Link>
-              ))}
-              <Link
-                to="/services"
-                className="px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                All Services
-              </Link>
-              <div className="border-t border-border my-2" />
-              <a
-                href={getPhoneLink()}
-                className="px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-2"
-              >
-                <Phone className="w-4 h-4" />
-                {businessInfo.phone}
-              </a>
-              <div className="px-4 pt-2">
-                <Button asChild className="w-full btn-premium">
-                  <Link to="/booking" onClick={() => setMobileMenuOpen(false)}>
-                    Book Now
+                  <Link
+                    to="/services"
+                    className="px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg block"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    All Services
                   </Link>
-                </Button>
-              </div>
-            </nav>
-          </div>
-        )}
+                </motion.div>
+                <div className="border-t border-border my-2" />
+                <motion.a
+                  href={getPhoneLink()}
+                  className="px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-2"
+                  initial={shouldReduceMotion ? false : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  <Phone className="w-4 h-4" />
+                  {businessInfo.phone}
+                </motion.a>
+                <motion.div 
+                  className="px-4 pt-2"
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.45 }}
+                >
+                  <Button asChild className="w-full btn-premium">
+                    <Link to="/booking" onClick={() => setMobileMenuOpen(false)}>
+                      Book Now
+                    </Link>
+                  </Button>
+                </motion.div>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );
