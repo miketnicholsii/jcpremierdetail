@@ -105,25 +105,25 @@ const Index = () => {
         <div className="absolute top-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         <div className="absolute bottom-1/3 right-0 w-2/3 h-px bg-gradient-to-l from-transparent via-primary/20 to-transparent" />
 
-        <div className="container-custom relative z-10 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container-custom relative z-10 py-12 sm:py-20 px-4">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left: Content */}
             <FadeIn>
               <div className="max-w-2xl">
                 {/* Badge */}
                 <motion.div 
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/40 bg-primary/10 text-primary mb-8"
+                  className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-primary/40 bg-primary/10 text-primary mb-6 sm:mb-8"
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={heroTransition(0.2)}
                 >
-                  <Sparkles className="w-4 h-4" />
-                  <span className="text-sm font-medium">Spartanburg's Premier Detail Studio</span>
+                  <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="text-xs sm:text-sm font-medium">Spartanburg's Premier Detail Studio</span>
                 </motion.div>
 
                 {/* Main heading */}
                 <motion.h1 
-                  className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight leading-[1.1]"
+                  className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 tracking-tight leading-[1.1]"
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={heroTransition(0.3)}
@@ -136,7 +136,7 @@ const Index = () => {
                 </motion.h1>
 
                 <motion.p 
-                  className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed"
+                  className="text-base sm:text-xl md:text-2xl text-muted-foreground mb-6 sm:mb-8 leading-relaxed"
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={heroTransition(0.4)}
@@ -147,7 +147,7 @@ const Index = () => {
 
                 {/* Quick stats */}
                 <motion.div 
-                  className="flex flex-wrap gap-6 mb-8"
+                  className="flex flex-wrap gap-4 sm:gap-6 mb-6 sm:mb-8"
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={heroTransition(0.5)}
@@ -157,29 +157,29 @@ const Index = () => {
                     { value: "5.0", label: "Google Rating" },
                     { value: "5+", label: "Years Experience" },
                   ].map((stat, idx) => (
-                    <div key={idx} className="text-center">
-                      <p className="text-3xl font-bold text-primary">{stat.value}</p>
-                      <p className="text-sm text-muted-foreground">{stat.label}</p>
+                    <div key={idx} className="text-center min-w-[80px]">
+                      <p className="text-2xl sm:text-3xl font-bold text-primary">{stat.value}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{stat.label}</p>
                     </div>
                   ))}
                 </motion.div>
 
                 {/* CTA Buttons */}
                 <motion.div 
-                  className="flex flex-col sm:flex-row gap-4 mb-8"
+                  className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8"
                   initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={heroTransition(0.6)}
                 >
-                  <Button asChild size="lg" className="text-lg px-8 py-6 glow-effect">
+                  <Button asChild size="lg" className="text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 glow-effect w-full sm:w-auto">
                     <Link to="/booking">
-                      <Calendar className="w-5 h-5 mr-2" />
+                      <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                       Book Your Detail
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6 border-primary/50">
+                  <Button asChild variant="outline" size="lg" className="text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 border-primary/50 w-full sm:w-auto">
                     <Link to="/estimate">
-                      <Zap className="w-5 h-5 mr-2" />
+                      <Zap className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                       Instant Estimate
                     </Link>
                   </Button>
@@ -187,27 +187,27 @@ const Index = () => {
 
                 {/* Contact bar */}
                 <motion.div 
-                  className="flex flex-wrap gap-6 text-muted-foreground"
+                  className="flex flex-wrap gap-4 sm:gap-6 text-muted-foreground"
                   initial={shouldReduceMotion ? false : { opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={heroTransition(0.7)}
                 >
                   <a href={getPhoneLink()} className="flex items-center gap-2 hover:text-primary transition-colors group">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                      <Phone className="w-5 h-5 text-primary" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                      <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">Call Now</p>
-                      <p className="font-medium text-foreground">{businessInfo.phone}</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">Call Now</p>
+                      <p className="text-sm sm:text-base font-medium text-foreground">{businessInfo.phone}</p>
                     </div>
                   </a>
                   <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Clock className="w-5 h-5 text-primary" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">Hours</p>
-                      <p className="font-medium text-foreground">Mon-Fri 8-5</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">Hours</p>
+                      <p className="text-sm sm:text-base font-medium text-foreground">Mon-Fri 8-5</p>
                     </div>
                   </div>
                 </motion.div>
@@ -291,17 +291,17 @@ const Index = () => {
       </section>
 
       {/* Trust Badges - Animated Counter Style */}
-      <section className="py-16 border-y border-border/50 bg-gradient-to-r from-card/50 via-card to-card/50">
-        <div className="container-custom">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section className="py-10 sm:py-16 border-y border-border/50 bg-gradient-to-r from-card/50 via-card to-card/50">
+        <div className="container-custom px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
             {trustBadges.map((badge, index) => (
               <FadeIn key={index} delay={index * 0.1}>
                 <div className="text-center group">
-                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
-                    <badge.icon className="w-8 h-8 text-primary" />
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-2 sm:mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                    <badge.icon className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                   </div>
-                  <p className="text-3xl md:text-4xl font-bold text-foreground mb-1">{badge.value}</p>
-                  <p className="text-sm text-muted-foreground">{badge.label}</p>
+                  <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-0.5 sm:mb-1">{badge.value}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{badge.label}</p>
                 </div>
               </FadeIn>
             ))}
@@ -310,8 +310,8 @@ const Index = () => {
       </section>
 
       {/* Featured Services - Premium Grid */}
-      <section className="py-20 bg-background">
-        <div className="container-custom">
+      <section className="py-12 sm:py-20 bg-background">
+        <div className="container-custom px-4">
           <FadeIn>
             <SectionHeading
               badge="Our Services"
@@ -320,7 +320,7 @@ const Index = () => {
             />
           </FadeIn>
 
-          <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+          <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-12">
             {coreServices.map((service) => {
               const ServiceIcon = getServiceIcon(service.icon);
               const startingPrice = service.packages?.[0]?.prices?.small || 0;
@@ -332,20 +332,20 @@ const Index = () => {
                       {/* Hover gradient overlay */}
                       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       
-                      <CardContent className="p-6 relative z-10">
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
-                            <ServiceIcon className="w-7 h-7 text-primary" />
+                      <CardContent className="p-4 sm:p-6 relative z-10">
+                        <div className="flex items-start justify-between gap-3 mb-4">
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300 flex-shrink-0">
+                            <ServiceIcon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
                           </div>
                           {startingPrice > 0 && (
-                            <div className="text-right">
-                              <p className="text-xs text-muted-foreground">Starting at</p>
-                              <p className="text-lg font-bold text-primary">${startingPrice}</p>
+                            <div className="text-right flex-shrink-0">
+                              <p className="text-[10px] sm:text-xs text-muted-foreground">Starting at</p>
+                              <p className="text-base sm:text-lg font-bold text-primary">${startingPrice}</p>
                             </div>
                           )}
                         </div>
                         
-                        <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                        <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                           {service.name}
                         </h3>
                         
@@ -356,16 +356,16 @@ const Index = () => {
                         {/* Quick benefits */}
                         <div className="space-y-2 mb-4">
                           {service.benefits.slice(0, 2).map((benefit, idx) => (
-                            <div key={idx} className="flex items-center gap-2 text-sm">
-                              <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
-                              <span className="text-muted-foreground truncate">{benefit}</span>
+                            <div key={idx} className="flex items-start gap-2 text-sm">
+                              <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                              <span className="text-muted-foreground text-xs sm:text-sm line-clamp-1">{benefit}</span>
                             </div>
                           ))}
                         </div>
 
                         <div className="flex items-center text-primary font-medium text-sm pt-2 border-t border-border/50">
-                          View Details & Pricing
-                          <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" />
+                          <span className="text-xs sm:text-sm">View Details & Pricing</span>
+                          <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform flex-shrink-0" />
                         </div>
                       </CardContent>
                     </Card>
@@ -391,8 +391,8 @@ const Index = () => {
       <BeforeAfterGallery />
 
       {/* Process Section */}
-      <section className="py-20 bg-background">
-        <div className="container-custom">
+      <section className="py-12 sm:py-20 bg-background">
+        <div className="container-custom px-4">
           <FadeIn>
             <SectionHeading
               badge="How It Works"
@@ -401,7 +401,7 @@ const Index = () => {
             />
           </FadeIn>
 
-          <div className="grid md:grid-cols-4 gap-8 mt-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 mt-8 sm:mt-12">
             {processSteps.map((step, idx) => (
               <FadeIn key={idx} delay={idx * 0.15}>
                 <div className="text-center relative">
@@ -412,26 +412,26 @@ const Index = () => {
                   
                   <div className="relative z-10">
                     {/* Step number */}
-                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mx-auto mb-4 border border-primary/30">
-                      <step.icon className="w-8 h-8 text-primary" />
+                    <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mx-auto mb-3 sm:mb-4 border border-primary/30">
+                      <step.icon className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                     </div>
-                    <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm left-1/2 ml-6">
+                    <div className="absolute -top-1 sm:-top-2 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs sm:text-sm left-1/2 ml-4 sm:ml-6">
                       {idx + 1}
                     </div>
                   </div>
                   
-                  <h3 className="text-lg font-bold text-foreground mb-2">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.description}</p>
+                  <h3 className="text-base sm:text-lg font-bold text-foreground mb-1 sm:mb-2">{step.title}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{step.description}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
 
           <FadeIn delay={0.6}>
-            <div className="text-center mt-12">
-              <Button asChild size="lg" className="glow-effect">
+            <div className="text-center mt-8 sm:mt-12">
+              <Button asChild size="lg" className="glow-effect w-full sm:w-auto">
                 <Link to="/booking">
-                  <Calendar className="w-5 h-5 mr-2" />
+                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                   Start Your Transformation
                 </Link>
               </Button>
