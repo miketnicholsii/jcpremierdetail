@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Shield, Sparkles, Car, Armchair, Wrench, Droplets, ShieldCheck, Sun, Truck, Mountain, Anchor, Caravan, HardHat } from "lucide-react";
+import { ArrowRight, Shield, Sparkles, Car, Armchair, Wrench, Droplets, ShieldCheck, Sun, Truck, Mountain, Anchor, Caravan, HardHat, ShieldPlus, RefreshCw } from "lucide-react";
 import { Service } from "@/data/services";
 import { cn } from "@/lib/utils";
 
@@ -13,6 +13,7 @@ interface ServiceCardProps {
 const iconMap: Record<string, React.ElementType> = {
   Shield: Shield,
   ShieldCheck: ShieldCheck,
+  ShieldPlus: ShieldPlus,
   Sparkles: Sparkles,
   Car: Car,
   Truck: Truck,
@@ -24,6 +25,7 @@ const iconMap: Record<string, React.ElementType> = {
   Wrench: Wrench,
   Droplets: Droplets,
   Sun: Sun,
+  RefreshCw: RefreshCw,
 };
 
 export const getServiceIcon = (iconName: string): React.ElementType => {
