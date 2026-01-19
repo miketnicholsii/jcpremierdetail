@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from "lucide-react";
 import { businessInfo, getPhoneLink, getEmailLink, getDirectionsLink, serviceAreas } from "@/data/business";
 import { services } from "@/data/services";
+import { getLocationPath, getServiceLocationPath } from "@/lib/routes";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -52,7 +53,7 @@ const Footer = () => {
               {services.map((service) => (
                 <li key={service.id}>
                   <Link
-                    to={`/${service.slug}-spartanburg-sc`}
+                    to={getServiceLocationPath(service.slug, "spartanburg-sc")}
                     className="text-muted-foreground hover:text-primary text-sm transition-colors"
                   >
                     {service.name}
@@ -85,7 +86,7 @@ const Footer = () => {
               {serviceAreas.map((area) => (
                 <li key={area.id}>
                   <Link
-                    to={`/auto-detailing-${area.slug}`}
+                    to={getLocationPath(area.slug)}
                     className="text-muted-foreground hover:text-primary text-sm transition-colors"
                   >
                     {area.name}, {area.state}

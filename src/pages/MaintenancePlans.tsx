@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { FadeIn as AnimatedSection } from "@/components/ui/AnimatedSection";
@@ -38,6 +38,7 @@ import {
   Timer,
   ChevronRight,
 } from "lucide-react";
+import usePageVisibility from "@/hooks/usePageVisibility";
 import { Link } from "react-router-dom";
 import { businessInfo, getPhoneLink } from "@/data/business";
 
@@ -258,6 +259,11 @@ const comparisonFeatures = [
 
 const MaintenancePlans = () => {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("monthly");
+  const shouldReduceMotion = useReducedMotion();
+  const isPageVisible = usePageVisibility();
+  const allowMotion = isPageVisible && !shouldReduceMotion;
+  const heroTransition = (delay = 0) =>
+    shouldReduceMotion ? { duration: 0, delay: 0 } : { duration: 0.8, delay };
 
   return (
     <Layout>
@@ -279,20 +285,20 @@ const MaintenancePlans = () => {
         {/* Animated elements */}
         <motion.div
           className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
+          animate={allowMotion ? { scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] } : { scale: 1, opacity: 0.3 }}
+          transition={allowMotion ? { duration: 8, repeat: Infinity } : { duration: 0 }}
         />
         <motion.div
           className="absolute bottom-20 right-10 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 10, repeat: Infinity }}
+          animate={allowMotion ? { scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] } : { scale: 1, opacity: 0.3 }}
+          transition={allowMotion ? { duration: 10, repeat: Infinity } : { duration: 0 }}
         />
 
         <div className="container relative z-10 py-24 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={heroTransition()}
           >
             <Badge className="mb-6 px-4 py-2 text-sm bg-primary/10 text-primary border-primary/20">
               <RefreshCw className="w-4 h-4 mr-2" />
@@ -328,9 +334,9 @@ const MaintenancePlans = () => {
 
           {/* Trust stats */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={heroTransition(0.3)}
             className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8"
           >
             {[

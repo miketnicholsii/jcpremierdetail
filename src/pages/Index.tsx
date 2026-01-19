@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
@@ -6,11 +5,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import Layout from "@/components/layout/Layout";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { FadeIn, SlideInLeft, SlideInRight, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
-import BeforeAfterSlider from "@/components/ui/BeforeAfterSlider";
+import BeforeAfterGallery from "@/components/home/BeforeAfterGallery";
+import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
 import { businessInfo, serviceAreas, getPhoneLink } from "@/data/business";
 import { services, vehicleCategories } from "@/data/services";
 import { getServiceIcon } from "@/components/ui/ServiceCard";
-import { motion, AnimatePresence } from "framer-motion";
+import { getLocationPath, getServiceLocationPath } from "@/lib/routes";
+import { motion, useReducedMotion } from "framer-motion";
+import usePageVisibility from "@/hooks/usePageVisibility";
 import {
   Shield,
   Star,
@@ -28,9 +30,6 @@ import {
   Caravan,
   HardHat,
   ArrowRight,
-  ChevronLeft,
-  ChevronRight,
-  Quote,
   Play,
   Calendar,
   Zap,
@@ -49,75 +48,6 @@ const trustBadges = [
   { icon: Star, label: "Google Rating", value: "5.0" },
 ];
 
-const testimonials = [
-  {
-    name: "Michael R.",
-    location: "Spartanburg, SC",
-    vehicle: "Tesla Model 3",
-    service: "Ceramic Coating",
-    text: "JC Premier Detail transformed my Tesla. The ceramic coating is flawless and the paint correction removed years of swirl marks. The attention to detail was incredible—they even showed me the before and after under inspection lights. Highly recommend!",
-    rating: 5,
-    image: null,
-  },
-  {
-    name: "Sarah T.",
-    location: "Greenville, SC",
-    vehicle: "BMW X5",
-    service: "Full Detail + PPF",
-    text: "Best detailing service in the Upstate. Professional, thorough, and the results speak for themselves. My car looks better than when I bought it! Josh took the time to explain every step of the process and the protection benefits.",
-    rating: 5,
-    image: null,
-  },
-  {
-    name: "David K.",
-    location: "Greer, SC",
-    vehicle: "Ford F-250",
-    service: "Interior Detail",
-    text: "The Platinum interior detail was worth every penny. They got stains out I thought were permanent. My truck's cab is cleaner than it's been in years. Incredible attention to detail—every vent, every crevice, spotless.",
-    rating: 5,
-    image: null,
-  },
-  {
-    name: "Jennifer M.",
-    location: "Boiling Springs, SC",
-    vehicle: "Jeep Wrangler",
-    service: "Undercoating + Ceramic",
-    text: "As an off-road enthusiast, I needed protection that could handle trail abuse. JC Premier Detail delivered. The undercoating has already saved my Jeep from rock damage multiple times. Worth every penny!",
-    rating: 5,
-    image: null,
-  },
-  {
-    name: "Robert H.",
-    location: "Spartanburg, SC",
-    vehicle: "Pontoon Boat",
-    service: "Marine Ceramic Coating",
-    text: "I didn't know ceramic coating was an option for boats until I found JC Premier. The gel coat looks incredible now, and cleaning after lake trips takes half the time. Fantastic work on a unique project.",
-    rating: 5,
-    image: null,
-  },
-];
-
-const beforeAfterGallery = [
-  {
-    title: "Paint Correction",
-    description: "Severe swirl marks removed, restoring mirror-like finish",
-    beforeImage: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=800&q=80",
-    afterImage: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
-  },
-  {
-    title: "Interior Restoration",
-    description: "Complete interior transformation with deep cleaning",
-    beforeImage: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80",
-    afterImage: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&q=80",
-  },
-  {
-    title: "Ceramic Coating",
-    description: "5-year ceramic protection with incredible depth and gloss",
-    beforeImage: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=800&q=80",
-    afterImage: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80",
-  },
-];
-
 const processSteps = [
   { icon: Phone, title: "Book", description: "Schedule your appointment online or call us directly" },
   { icon: Car, title: "Drop Off", description: "Bring your vehicle to our state-of-the-art facility" },
@@ -126,19 +56,11 @@ const processSteps = [
 ];
 
 const Index = () => {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [currentGalleryItem, setCurrentGalleryItem] = useState(0);
-
-  // Auto-rotate testimonials
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const nextTestimonial = () => setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-  const prevTestimonial = () => setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  const shouldReduceMotion = useReducedMotion();
+  const isPageVisible = usePageVisibility();
+  const allowMotion = isPageVisible && !shouldReduceMotion;
+  const heroTransition = (delay: number) =>
+    shouldReduceMotion ? { duration: 0, delay: 0 } : { delay };
 
   // Core 6 services
   const coreServices = services.filter((s) =>
@@ -170,13 +92,13 @@ const Index = () => {
         {/* Floating accent elements */}
         <motion.div 
           className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
+          animate={allowMotion ? { scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] } : { scale: 1, opacity: 0.3 }}
+          transition={allowMotion ? { duration: 8, repeat: Infinity } : { duration: 0 }}
         />
         <motion.div 
           className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-accent/10 rounded-full blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 6, repeat: Infinity }}
+          animate={allowMotion ? { scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] } : { scale: 1, opacity: 0.2 }}
+          transition={allowMotion ? { duration: 6, repeat: Infinity } : { duration: 0 }}
         />
         
         {/* Accent lines */}
@@ -191,9 +113,9 @@ const Index = () => {
                 {/* Badge */}
                 <motion.div 
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/40 bg-primary/10 text-primary mb-8"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
+                  transition={heroTransition(0.2)}
                 >
                   <Sparkles className="w-4 h-4" />
                   <span className="text-sm font-medium">Spartanburg's Premier Detail Studio</span>
@@ -202,9 +124,9 @@ const Index = () => {
                 {/* Main heading */}
                 <motion.h1 
                   className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight leading-[1.1]"
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
+                  transition={heroTransition(0.3)}
                 >
                   <span className="text-foreground">Protection That</span>
                   <br />
@@ -215,9 +137,9 @@ const Index = () => {
 
                 <motion.p 
                   className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed"
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
+                  transition={heroTransition(0.4)}
                 >
                   Professional ceramic coating, paint protection film & paint correction. 
                   <span className="text-foreground font-medium"> We don't just clean—we protect.</span>
@@ -226,9 +148,9 @@ const Index = () => {
                 {/* Quick stats */}
                 <motion.div 
                   className="flex flex-wrap gap-6 mb-8"
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
+                  transition={heroTransition(0.5)}
                 >
                   {[
                     { value: "500+", label: "Vehicles Protected" },
@@ -245,9 +167,9 @@ const Index = () => {
                 {/* CTA Buttons */}
                 <motion.div 
                   className="flex flex-col sm:flex-row gap-4 mb-8"
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
+                  transition={heroTransition(0.6)}
                 >
                   <Button asChild size="lg" className="text-lg px-8 py-6 glow-effect">
                     <Link to="/booking">
@@ -266,9 +188,9 @@ const Index = () => {
                 {/* Contact bar */}
                 <motion.div 
                   className="flex flex-wrap gap-6 text-muted-foreground"
-                  initial={{ opacity: 0 }}
+                  initial={shouldReduceMotion ? false : { opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.7 }}
+                  transition={heroTransition(0.7)}
                 >
                   <a href={getPhoneLink()} className="flex items-center gap-2 hover:text-primary transition-colors group">
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
@@ -314,8 +236,8 @@ const Index = () => {
                 {/* Floating cards */}
                 <motion.div 
                   className="absolute -top-6 -right-6 bg-card border border-border/50 rounded-xl p-4 shadow-lg"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 4, repeat: Infinity }}
+                  animate={allowMotion ? { y: [0, -10, 0] } : { y: 0 }}
+                  transition={allowMotion ? { duration: 4, repeat: Infinity } : { duration: 0 }}
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
@@ -330,8 +252,8 @@ const Index = () => {
 
                 <motion.div 
                   className="absolute -bottom-4 -left-4 bg-card border border-border/50 rounded-xl p-4 shadow-lg"
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 5, repeat: Infinity }}
+                  animate={allowMotion ? { y: [0, 10, 0] } : { y: 0 }}
+                  transition={allowMotion ? { duration: 5, repeat: Infinity } : { duration: 0 }}
                 >
                   <div className="flex items-center gap-2">
                     <div className="flex -space-x-2">
@@ -359,8 +281,8 @@ const Index = () => {
         {/* Scroll indicator */}
         <motion.div 
           className="absolute bottom-8 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          animate={allowMotion ? { y: [0, 10, 0] } : { y: 0 }}
+          transition={allowMotion ? { duration: 2, repeat: Infinity } : { duration: 0 }}
         >
           <div className="w-6 h-10 rounded-full border-2 border-primary/30 flex items-start justify-center p-2">
             <div className="w-1.5 h-3 bg-primary/50 rounded-full" />
@@ -405,7 +327,7 @@ const Index = () => {
               
               return (
                 <StaggerItem key={service.id}>
-                  <Link to={`/${service.slug}-spartanburg-sc`} className="group block h-full">
+                  <Link to={getServiceLocationPath(service.slug, "spartanburg-sc")} className="group block h-full">
                     <Card className="h-full bg-gradient-to-br from-card to-card/50 border-border/50 hover:border-primary/50 transition-all duration-500 overflow-hidden relative">
                       {/* Hover gradient overlay */}
                       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -466,68 +388,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Before/After Gallery */}
-      <section className="py-20 bg-card/30">
-        <div className="container-custom">
-          <FadeIn>
-            <SectionHeading
-              badge="Results"
-              title="See The Difference"
-              description="Real results from real projects. Drag the slider to reveal the transformation."
-            />
-          </FadeIn>
-
-          <div className="mt-12">
-            {/* Gallery navigation */}
-            <div className="flex justify-center gap-4 mb-8">
-              {beforeAfterGallery.map((item, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentGalleryItem(idx)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    currentGalleryItem === idx
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/50"
-                  }`}
-                >
-                  {item.title}
-                </button>
-              ))}
-            </div>
-
-            {/* Active gallery item */}
-            <FadeIn key={currentGalleryItem}>
-              <div className="max-w-4xl mx-auto">
-                <BeforeAfterSlider
-                  beforeImage={beforeAfterGallery[currentGalleryItem].beforeImage}
-                  afterImage={beforeAfterGallery[currentGalleryItem].afterImage}
-                  beforeLabel="Before"
-                  afterLabel="After"
-                />
-                <div className="text-center mt-6">
-                  <h3 className="text-xl font-bold text-foreground mb-2">
-                    {beforeAfterGallery[currentGalleryItem].title}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {beforeAfterGallery[currentGalleryItem].description}
-                  </p>
-                </div>
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={0.3}>
-              <div className="text-center mt-10">
-                <Button asChild>
-                  <Link to="/gallery">
-                    View Full Gallery
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-                </Button>
-              </div>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
+      <BeforeAfterGallery />
 
       {/* Process Section */}
       <section className="py-20 bg-background">
@@ -579,93 +440,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials Carousel */}
-      <section className="py-20 bg-gradient-to-br from-card/50 via-background to-card/30 overflow-hidden">
-        <div className="container-custom">
-          <FadeIn>
-            <SectionHeading
-              badge="Reviews"
-              title="What Our Clients Say"
-              description="Don't just take our word for it—hear from vehicle owners across the Upstate."
-            />
-          </FadeIn>
-
-          <div className="relative mt-12 max-w-4xl mx-auto">
-            {/* Main testimonial */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentTestimonial}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.5 }}
-                className="bg-card border border-border/50 rounded-2xl p-8 md:p-12 relative"
-              >
-                {/* Quote icon */}
-                <Quote className="w-12 h-12 text-primary/20 absolute top-6 right-6" />
-                
-                {/* Stars */}
-                <div className="flex gap-1 mb-6">
-                  {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                    <Star key={i} className="w-6 h-6 fill-primary text-primary" />
-                  ))}
-                </div>
-
-                {/* Quote text */}
-                <blockquote className="text-xl md:text-2xl text-foreground leading-relaxed mb-8">
-                  "{testimonials[currentTestimonial].text}"
-                </blockquote>
-
-                {/* Author info */}
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center">
-                    <span className="text-xl font-bold text-primary">
-                      {testimonials[currentTestimonial].name.charAt(0)}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">{testimonials[currentTestimonial].name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {testimonials[currentTestimonial].vehicle} • {testimonials[currentTestimonial].service}
-                    </p>
-                    <p className="text-sm text-primary">{testimonials[currentTestimonial].location}</p>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Navigation */}
-            <div className="flex items-center justify-between mt-8">
-              <button
-                onClick={prevTestimonial}
-                className="w-12 h-12 rounded-full bg-card border border-border/50 flex items-center justify-center hover:border-primary/50 hover:bg-primary/10 transition-all"
-              >
-                <ChevronLeft className="w-5 h-5 text-foreground" />
-              </button>
-
-              {/* Dots */}
-              <div className="flex gap-2">
-                {testimonials.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentTestimonial(idx)}
-                    className={`h-2 rounded-full transition-all ${
-                      idx === currentTestimonial ? "w-8 bg-primary" : "w-2 bg-primary/30"
-                    }`}
-                  />
-                ))}
-              </div>
-
-              <button
-                onClick={nextTestimonial}
-                className="w-12 h-12 rounded-full bg-card border border-border/50 flex items-center justify-center hover:border-primary/50 hover:bg-primary/10 transition-all"
-              >
-                <ChevronRight className="w-5 h-5 text-foreground" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <TestimonialsCarousel />
 
       {/* Vehicle Categories */}
       <section className="py-20 bg-background">
@@ -727,7 +502,7 @@ const Index = () => {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
             {serviceAreas.map((area, idx) => (
               <FadeIn key={area.slug} delay={idx * 0.1}>
-                <Link to={`/auto-detailing-${area.slug}`}>
+                <Link to={getLocationPath(area.slug)}>
                   <Card className="group bg-card border-border/50 hover:border-primary/50 transition-all duration-300 overflow-hidden">
                     <CardContent className="p-6 text-center relative">
                       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />

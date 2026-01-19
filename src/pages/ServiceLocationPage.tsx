@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,8 @@ import { FadeIn, SlideInLeft, SlideInRight, StaggerContainer, StaggerItem } from
 import { getServiceBySlug, services, vehicleCategories } from "@/data/services";
 import { businessInfo, serviceAreas, getPhoneLink } from "@/data/business";
 import { getServiceIcon } from "@/components/ui/ServiceCard";
+import { getLocationPath, getServiceLocationPath, resolveServiceLocationFromSlug } from "@/lib/routes";
+import NotFound from "@/pages/NotFound";
 import {
   Phone,
   CheckCircle2,
@@ -22,15 +24,27 @@ import {
 } from "lucide-react";
 
 interface ServiceLocationPageProps {
-  serviceId: string;
-  cityId: string;
+  serviceSlug?: string;
+  cityId?: string;
 }
 
-const ServiceLocationPage = ({ serviceId, cityId }: ServiceLocationPageProps) => {
-  const service = services.find((s) => s.id === serviceId);
-  const city = serviceAreas.find((a) => a.id === cityId);
+const ServiceLocationPage = ({ serviceSlug, cityId }: ServiceLocationPageProps) => {
+  const { serviceLocationSlug } = useParams();
+  const resolved = serviceLocationSlug
+    ? resolveServiceLocationFromSlug(serviceLocationSlug)
+    : null;
+  const service = serviceSlug
+    ? getServiceBySlug(serviceSlug)
+    : resolved?.service;
+  const city = cityId
+    ? serviceAreas.find((area) => area.id === cityId)
+    : resolved?.city;
 
   if (!service || !city) {
+    if (serviceLocationSlug) {
+      return <NotFound />;
+    }
+
     return (
       <Layout>
         <section className="section-padding">
@@ -56,10 +70,10 @@ const ServiceLocationPage = ({ serviceId, cityId }: ServiceLocationPageProps) =>
   );
 
   // Other cities for internal linking
-  const otherCities = serviceAreas.filter((a) => a.id !== cityId);
+  const otherCities = serviceAreas.filter((a) => a.id !== city.id);
 
   // Other services in same city
-  const otherServices = services.filter((s) => s.id !== serviceId);
+  const otherServices = services.filter((s) => s.id !== service.id);
 
   return (
     <Layout>
@@ -78,7 +92,7 @@ const ServiceLocationPage = ({ serviceId, cityId }: ServiceLocationPageProps) =>
                 <span>/</span>
                 <Link to="/services" className="hover:text-primary">Services</Link>
                 <span>/</span>
-                <Link to={`/auto-detailing-${city.slug}`} className="hover:text-primary">{city.name}</Link>
+                <Link to={getLocationPath(city.slug)} className="hover:text-primary">{city.name}</Link>
                 <span>/</span>
                 <span className="text-foreground">{service.name}</span>
               </nav>
@@ -361,7 +375,7 @@ const ServiceLocationPage = ({ serviceId, cityId }: ServiceLocationPageProps) =>
             {otherServices.slice(0, 6).map((otherService) => (
               <Link
                 key={otherService.id}
-                to={`/${otherService.slug}-${city.slug}`}
+                to={getServiceLocationPath(otherService.slug, city.slug)}
                 className="group flex items-center gap-4 p-4 rounded-xl bg-card border border-border/50 hover:border-primary/50 transition-all"
               >
                 <div className="flex-1 min-w-0">
@@ -389,7 +403,7 @@ const ServiceLocationPage = ({ serviceId, cityId }: ServiceLocationPageProps) =>
             {otherCities.map((otherCity) => (
               <Link
                 key={otherCity.id}
-                to={`/${service.slug}-${otherCity.slug}`}
+                to={getServiceLocationPath(service.slug, otherCity.slug)}
                 className="group flex items-center justify-center gap-2 p-4 rounded-xl bg-card border border-border/50 hover:border-primary/50 transition-all"
               >
                 <MapPin className="w-4 h-4 text-primary" />
