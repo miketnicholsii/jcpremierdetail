@@ -7,6 +7,8 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { FadeIn, SlideInLeft, SlideInRight, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
 import BeforeAfterGallery from "@/components/home/BeforeAfterGallery";
 import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
+import WhyChooseUs from "@/components/home/WhyChooseUs";
+import AnimatedCounter from "@/components/home/AnimatedCounter";
 import { businessInfo, serviceAreas, getPhoneLink } from "@/data/business";
 import { services, vehicleCategories } from "@/data/services";
 import { getServiceIcon } from "@/components/ui/ServiceCard";
@@ -35,6 +37,8 @@ import {
   Zap,
   ThumbsUp,
   Timer,
+  BadgeCheck,
+  TrendingUp,
 } from "lucide-react";
 
 const vehicleIcons: Record<string, React.ElementType> = {
@@ -42,17 +46,17 @@ const vehicleIcons: Record<string, React.ElementType> = {
 };
 
 const trustBadges = [
-  { icon: Shield, label: "Ceramic Pro Certified", value: "100%" },
-  { icon: Award, label: "Years Experience", value: "5+" },
-  { icon: Users, label: "Happy Clients", value: "500+" },
-  { icon: Star, label: "Google Rating", value: "5.0" },
+  { icon: BadgeCheck, label: "Ceramic Pro Certified", value: 100, suffix: "%", description: "Fully Certified" },
+  { icon: TrendingUp, label: "Years Experience", value: 5, suffix: "+", description: "In Business" },
+  { icon: Users, label: "Happy Clients", value: 500, suffix: "+", description: "Vehicles Protected" },
+  { icon: Star, label: "Google Rating", value: 5, suffix: ".0", description: "Stars Average" },
 ];
 
 const processSteps = [
-  { icon: Phone, title: "Book", description: "Schedule your appointment online or call us directly" },
-  { icon: Car, title: "Drop Off", description: "Bring your vehicle to our state-of-the-art facility" },
-  { icon: Sparkles, title: "Transform", description: "We work our magic with precision and care" },
-  { icon: ThumbsUp, title: "Enjoy", description: "Drive away with showroom-perfect results" },
+  { icon: Phone, title: "Book", description: "Schedule online or call us directly", step: "01" },
+  { icon: Car, title: "Drop Off", description: "Bring your vehicle to our facility", step: "02" },
+  { icon: Sparkles, title: "Transform", description: "We work our magic with care", step: "03" },
+  { icon: ThumbsUp, title: "Enjoy", description: "Drive away with stunning results", step: "04" },
 ];
 
 const Index = () => {
@@ -291,17 +295,30 @@ const Index = () => {
       </section>
 
       {/* Trust Badges - Animated Counter Style */}
-      <section className="py-10 sm:py-16 border-y border-border/50 bg-gradient-to-r from-card/50 via-card to-card/50">
-        <div className="container-custom px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
+      <section className="py-12 sm:py-20 border-y border-border/50 bg-gradient-to-r from-card/50 via-card to-card/50 relative overflow-hidden">
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-[0.02]" style={{
+          backgroundImage: `linear-gradient(hsl(205 100% 50%) 1px, transparent 1px), linear-gradient(90deg, hsl(205 100% 50%) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px'
+        }} />
+        
+        <div className="container-custom px-4 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {trustBadges.map((badge, index) => (
               <FadeIn key={index} delay={index * 0.1}>
                 <div className="text-center group">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-2 sm:mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
-                    <badge.icon className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:from-primary/30 group-hover:to-primary/20 group-hover:scale-110 transition-all duration-300 border border-primary/20">
+                    <badge.icon className="w-7 h-7 sm:w-8 sm:h-8 text-primary" />
                   </div>
-                  <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-0.5 sm:mb-1">{badge.value}</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground">{badge.label}</p>
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-1">
+                    <AnimatedCounter 
+                      end={badge.value} 
+                      suffix={badge.suffix}
+                      className="text-transparent bg-clip-text bg-gradient-to-r from-foreground to-foreground/80"
+                    />
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted-foreground font-medium">{badge.label}</p>
+                  <p className="text-[10px] text-muted-foreground/70 mt-0.5 hidden sm:block">{badge.description}</p>
                 </div>
               </FadeIn>
             ))}
@@ -390,9 +407,12 @@ const Index = () => {
 
       <BeforeAfterGallery />
 
-      {/* Process Section */}
-      <section className="py-12 sm:py-20 bg-background">
-        <div className="container-custom px-4">
+      {/* Process Section - Enhanced */}
+      <section className="py-16 sm:py-24 bg-background relative overflow-hidden">
+        {/* Background accent */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_100%,hsl(205_100%_50%/0.05),transparent)]" />
+        
+        <div className="container-custom px-4 relative z-10">
           <FadeIn>
             <SectionHeading
               badge="How It Works"
@@ -401,37 +421,39 @@ const Index = () => {
             />
           </FadeIn>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 mt-8 sm:mt-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mt-10 sm:mt-14">
             {processSteps.map((step, idx) => (
               <FadeIn key={idx} delay={idx * 0.15}>
-                <div className="text-center relative">
+                <div className="text-center relative group">
                   {/* Connector line */}
                   {idx < processSteps.length - 1 && (
-                    <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-gradient-to-r from-primary/50 to-primary/20" />
+                    <div className="hidden md:block absolute top-10 left-[60%] w-full h-px bg-gradient-to-r from-primary/50 via-primary/30 to-transparent" />
                   )}
                   
                   <div className="relative z-10">
-                    {/* Step number */}
-                    <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mx-auto mb-3 sm:mb-4 border border-primary/30">
-                      <step.icon className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+                    {/* Step card */}
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-card to-card/50 border border-border/50 flex items-center justify-center mx-auto mb-4 group-hover:border-primary/50 group-hover:shadow-lg group-hover:shadow-primary/10 transition-all duration-300">
+                      <step.icon className="w-7 h-7 sm:w-9 sm:h-9 text-primary" />
                     </div>
-                    <div className="absolute -top-1 sm:-top-2 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs sm:text-sm left-1/2 ml-4 sm:ml-6">
-                      {idx + 1}
+                    
+                    {/* Step number badge */}
+                    <div className="absolute -top-2 left-1/2 ml-5 sm:ml-6 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-primary to-primary/80 text-primary-foreground flex items-center justify-center font-bold text-xs shadow-lg shadow-primary/30">
+                      {step.step}
                     </div>
                   </div>
                   
-                  <h3 className="text-base sm:text-lg font-bold text-foreground mb-1 sm:mb-2">{step.title}</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{step.description}</p>
+                  <h3 className="text-base sm:text-lg font-bold text-foreground mb-1.5 group-hover:text-primary transition-colors">{step.title}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{step.description}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
 
           <FadeIn delay={0.6}>
-            <div className="text-center mt-8 sm:mt-12">
-              <Button asChild size="lg" className="glow-effect w-full sm:w-auto">
+            <div className="text-center mt-10 sm:mt-14">
+              <Button asChild size="lg" className="glow-effect w-full sm:w-auto text-base">
                 <Link to="/booking">
-                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                  <Calendar className="w-5 h-5 mr-2" />
                   Start Your Transformation
                 </Link>
               </Button>
@@ -441,8 +463,8 @@ const Index = () => {
       </section>
 
       <TestimonialsCarousel />
-
-      {/* Vehicle Categories */}
+      
+      <WhyChooseUs />
       <section className="py-20 bg-background">
         <div className="container-custom">
           <FadeIn>
