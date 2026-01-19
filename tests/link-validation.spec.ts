@@ -51,7 +51,7 @@ test("internal links resolve without 404s", async ({ page }) => {
     );
 
     for (const href of hrefs) {
-      const normalized = normalizeInternalPath(href, base);
+      const normalized = normalizeInternalPath(href!, base);
       if (normalized) {
         collectedPaths.add(normalized);
       }
@@ -63,4 +63,26 @@ test("internal links resolve without 404s", async ({ page }) => {
     await expect(page.locator("text=Oops! Page not found")).toHaveCount(0);
     await expect(page.locator("text=Page Not Found")).toHaveCount(0);
   }
+});
+
+test("homepage loads with correct title", async ({ page }) => {
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await expect(page).toHaveTitle(/JC Premier Detail/);
+});
+
+test("booking page loads correctly", async ({ page }) => {
+  await page.goto("/booking", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("h1")).toContainText(/Book/i);
+});
+
+test("services page lists all services", async ({ page }) => {
+  await page.goto("/services", { waitUntil: "domcontentloaded" });
+  for (const service of services) {
+    await expect(page.locator(`text=${service.name}`).first()).toBeVisible();
+  }
+});
+
+test("contact page shows business info", async ({ page }) => {
+  await page.goto("/contact", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("text=(864) 542-3617")).toBeVisible();
 });
