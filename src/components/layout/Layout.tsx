@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import CursorGlow from "@/components/ui/CursorGlow";
 import FloatingCTA from "@/components/ui/FloatingCTA";
+import ScrollToTop from "@/components/ui/ScrollToTop";
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,13 +12,14 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-background">
       <ScrollProgress />
       <CursorGlow />
       <Header />
       <main className="flex-1 pt-20">{children}</main>
       <Footer />
       <FloatingCTA />
+      <ScrollToTop />
     </div>
   );
 };
